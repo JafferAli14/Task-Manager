@@ -1,0 +1,48 @@
+GET http://localhost:5261/api/todo
+
+
+###
+POST http://localhost:5261/api/todo/batch
+Content-Type: application/json
+
+[
+{
+    "title":"Coding",
+    "completed":false
+},
+{
+    "title":"walking",
+    "completed": true
+},
+{
+    "title":"swimming",
+    "completed":false
+}
+]
+
+###
+POST http://localhost:5261/api/todo
+Content-Type: application/json
+
+{
+    "title":"eating",
+    "completed":true
+}
+
+###
+PUT http://localhost:5261/api/todo/2
+Content-Type: application/json
+
+{
+    "title":"fishing",
+    "completed":false
+}
+
+###
+DELETE http://localhost:5261/api/todo/6
+
+###
+
+
+
+
