@@ -3,6 +3,7 @@ import { useauthstore } from "../stores/authpinia";
 import Todos from "../components/Todos.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Mainlayout from "../components/Layout/Mainlayout.vue";
 
 const router=createRouter({
     history:createWebHistory(),
@@ -26,13 +27,17 @@ const router=createRouter({
         },
 
         {
-        path: '/todos',
-        name: 'Todos',
-        component: Todos, 
-        meta: { requiresAuth: true } 
+        path: "/",
+        component: Mainlayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+            path: "todos",
+            name: "Todos",
+            component: Todos,
+            },       
+             ]
         }
-
-        
     ]
 })
 
