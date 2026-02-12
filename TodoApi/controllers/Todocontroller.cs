@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -59,12 +60,18 @@ public class Todocontroller : ControllerBase
 
     
     //single post
+    [Authorize]
     [HttpPost]
     public async Task< IActionResult> Create(Todocreate dto)
     {
+            var userid=int.Parse(User.FindFirst("id")!.Value);
+
             var task=new Todo
             {
                 title=dto.title,
+                description=dto.description,
+                priority=dto.priority,
+                duedate=dto.duedate,
                 completed=dto.completed
             };
             _context.Todos.Add(task);

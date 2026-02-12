@@ -7,7 +7,7 @@ using TodoApi.Services;
 
 namespace TodoApi.controllers;
 [ApiController]
-[Route("/api[controller]")]
+[Route("api/[controller]")]
 public class Authcontroller:ControllerBase
 {
     private readonly TodoDbcontext _context;
@@ -19,29 +19,35 @@ public class Authcontroller:ControllerBase
     }
 
 
-    //register post
-    [HttpPost("register")]
-    public async Task<IActionResult> registerit(Register regdto)
+[HttpPost("register")]
+public async Task<IActionResult> registerit([FromBody] Register regdto)
+{
+    if (regdto == null)
     {
-        var un=await _context.users.AnyAsync(u=> u.username==regdto.username);
-        if (un)
-        {
-            return BadRequest("username already exists");
-        }
-        var user = new Users
-        {
-            username=regdto.username,
-            passwordhash = BCrypt.Net.BCrypt.HashPassword(regdto.password)
-        };
-
-        _context.users.Add(user);
-        await _context.SaveChangesAsync();
-
-        return Ok("changes made");
+        return BadRequest("Request body is empty or invalid JSON");
     }
 
+    var un = await _context.users.AnyAsync(u => u.username == regdto.username);
+    if (un)
+    {
+        return BadRequest("username already exists");
+    }
+
+    var user = new Users
+    {
+        username = regdto.username,
+        passwordhash = BCrypt.Net.BCrypt.HashPassword(regdto.password)
+    };
+
+    _context.users.Add(user);
+    await _context.SaveChangesAsync();
+
+    return Ok("User registered successfully");
+}
+
+
     [HttpPost("login")]
-    public async Task<IActionResult> login_function(Login logindto)
+    public async Task<IActionResult> login_function([FromBody] Login logindto)
     {
         var un = await _context.users.FirstOrDefaultAsync(u => u.username==logindto.username);
         if (un==null)
@@ -57,7 +63,7 @@ public class Authcontroller:ControllerBase
 
         var token=_tokenservice.createtokens(un);
         
-        return Ok(new{token});  
+        return Ok(new{token,userid=un.id,username=un.username});  
     }
 
 }

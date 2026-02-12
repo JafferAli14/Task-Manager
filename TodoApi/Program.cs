@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Tokens.Experimental;
 using TodoApi.Data;
+using TodoApi.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddCors(options=>{
+
+options.AddPolicy("frontendpolicy", policy =>
+{
+    policy.WithOrigins("http://localhost:5173");
+    policy.AllowAnyHeader();
+    policy.AllowAnyMethod();
+}
+
+);
+        
+});
+
 // Add Controllers (required for Web API)
 builder.Services.AddControllers();
 
@@ -38,6 +52,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TodoDbcontext>
              (options => options.UseSqlite("Data Source=todos.db"));
+
+builder.Services.AddScoped<Jwttokenservice>();
 
 
 var app = builder.Build();
@@ -49,12 +65,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(); 
 }
 
+app.UseCors("frontendpolicy");
 
-// Redirect HTTP → HTTPS
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// app.UseCors("frontendpolicy");
 
 //Map Controllers (connects your controller routes)
 app.MapControllers();

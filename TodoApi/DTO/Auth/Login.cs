@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace TodoApi.DTO.Auth;
 
 public class Login
 {
-    public string username { get; set; }="";
-    public string password { get; set; }="";
+   [Required] public string username { get; set; }="";
+   [Required] public string password { get; set; }="";
     
 }
