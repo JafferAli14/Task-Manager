@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,12 @@ public class Todocontroller : ControllerBase
     }
 
     //get
-
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> Getresult(){
+        var userid = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-        var tasks=await _context.Todos.ToListAsync();
+        var tasks=await _context.Todos.Where(t=>t.userid==userid).ToListAsync();
         var dto_list= tasks.Select(t=> new Todoread
         {
             id=t.id,
@@ -64,7 +66,7 @@ public class Todocontroller : ControllerBase
     [HttpPost]
     public async Task< IActionResult> Create(Todocreate dto)
     {
-            var userid=int.Parse(User.FindFirst("id")!.Value);
+            var userid = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var task=new Todo
             {
@@ -72,7 +74,8 @@ public class Todocontroller : ControllerBase
                 description=dto.description,
                 priority=dto.priority,
                 duedate=dto.duedate,
-                completed=dto.completed
+                completed=dto.completed,
+                userid=userid
             };
             _context.Todos.Add(task);
             await _context.SaveChangesAsync();

@@ -22,7 +22,8 @@ public class Jwttokenservice
         {
             new Claim(ClaimTypes.Name,user.username),
             
-            new Claim(ClaimTypes.NameIdentifier,user.id.ToString())
+            new Claim(ClaimTypes.NameIdentifier,user.id.ToString()),
+
         };
         
         var key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
