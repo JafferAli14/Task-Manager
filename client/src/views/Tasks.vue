@@ -1,26 +1,28 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import usetaskstore from '../stores/taskstore'
+import Taskform from '../components/Taskform.vue';
+import usetaskstore from '../stores/taskstore';
+const taskstore=usetaskstore()
 
-const taskStore = usetaskstore()
-
-onMounted(() => {
-  taskStore.fetchtasks()
+onMounted(()=>{
+  taskstore.fetchtasks()
 })
+
+
+const handleCreate = async (data:any) => {
+  await taskstore.addtask(data)
+}
+
+// const handlefetch=async()=>{
+//   await taskstore.fetchtasks()
+// }
+
 </script>
 
 <template>
-  <div>
-    <h1>Todo Page</h1>
-
-    <p v-if="taskStore.tasks.length === 0">
-      No tasks found.
-    </p>
-
-    <div v-for="task in taskStore.tasks" :key="task.id">
-      <h3>{{ task.title }}</h3>
-      <p>{{ task.description }}</p>
-    </div>
+  <div class="container mt-4">
+    <h2> Task Card</h2>
+    <Taskform @create="handleCreate" />
   </div>
 </template>
 
