@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Footer from './Footer.vue';
 import Navbar from './Navbar.vue';
 
@@ -9,7 +9,8 @@ import Navbar from './Navbar.vue';
     <div class="d-flex flex-column min-vh-100">
         <Navbar/>
         <main class="container  mt-5 flex-grow-1">
-            <slot />
+            <!-- <slot /> -->
+             <router-view />
         </main>
 
         <Footer/>

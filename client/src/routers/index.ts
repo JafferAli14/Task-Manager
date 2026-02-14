@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useauthstore } from "../stores/authpinia";
-import Todos from "../components/Todos.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Tasks from "../views/Tasks.vue";
 import Mainlayout from "../components/Layout/Mainlayout.vue";
+
+
 
 const router=createRouter({
     history:createWebHistory(),
@@ -34,7 +36,7 @@ const router=createRouter({
             {
             path: "todos",
             name: "Todos",
-            component: Todos,
+            component: Tasks,
             },       
              ]
         }

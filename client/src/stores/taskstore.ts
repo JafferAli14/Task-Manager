@@ -59,3 +59,5 @@ const usetaskstore=defineStore('tasks',{
     }
 }
 });
+
+export default usetaskstore;
