@@ -8,8 +8,7 @@ import Navbar from './Navbar.vue';
 <template>
     <div class="d-flex flex-column min-vh-100">
         <Navbar/>
-        <main class="container  mt-5 flex-grow-1">
-            <!-- <slot /> -->
+        <main class="container mb-5  mt-5 flex-grow-1">
              <router-view />
         </main>
 

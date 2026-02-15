@@ -43,7 +43,26 @@ const usetaskstore=defineStore('tasks',{
             }
         },
 
-    async deletetask(id:number){
+        async updatetask(id:number, data: Partial<taskdata>){
+            const authstore=useauthstore()
+            try{
+              const res = await api.put<taskdata>(`/api/todo/${id}`, data , {
+                    headers:{
+                        Authorization:`Bearer ${authstore.token}`
+                    }
+                })
+                
+            const index=this.tasks.findIndex(t=>t.id===id)
+            if( index!==-1){
+                this.tasks[index]=res.data
+            }
+            }
+            catch(error){
+                console.log(error)
+            }
+        },
+
+    async deletetask(id:number,){
         const authstore=useauthstore()
         try{
         await api.delete(`/api/todo/${id}`,{
