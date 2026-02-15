@@ -11,6 +11,6 @@ public class Todo
     public bool completed { get; set; }=false;
     public DateTime? duedate { get; set; }
     public int userid{get; set;}
-    public Users user { get; set; }
+    public Users? user { get; set; }
 
 }

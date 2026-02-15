@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using SQLitePCL;
 using TodoApi.Data;
 using TodoApi.DTO;
@@ -27,12 +28,18 @@ public class Todocontroller : ControllerBase
     [Authorize]
     [HttpGet]
     public async Task<IActionResult> Getresult(){
+        // var userid = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var userid = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        Console.WriteLine("Current User ID: " + userid);
 
         var tasks=await _context.Todos.Where(t=>t.userid==userid).ToListAsync();
+        // var tasks = await _context.Todos.ToListAsync();
         var dto_list= tasks.Select(t=> new Todoread
         {
             id=t.id,
+            description=t.description,
+            duedate=t.duedate,
+            priority=t.priority,
             title=t.title,
             completed=t.completed
 
@@ -81,10 +88,13 @@ public class Todocontroller : ControllerBase
             await _context.SaveChangesAsync();
 
             var readtask=new Todoread
-            {
-                id=task.id,
-                title=task.title,
-                completed=task.completed
+            {   
+                id = task.id,
+                title = task.title,
+                description = task.description, 
+                priority = task.priority,       
+                duedate = task.duedate,         
+                completed = task.completed
             };
 
         return CreatedAtAction(nameof(getbyid),new{id=task.id},readtask);
@@ -126,6 +136,9 @@ public class Todocontroller : ControllerBase
         }
 
         tasktoedit.title=updatedto.title;
+        tasktoedit.description=updatedto.description;
+        tasktoedit.duedate=updatedto.duedate;
+        tasktoedit.priority=updatedto.priority;
         tasktoedit.completed=updatedto.completed;
 
         await _context.SaveChangesAsync();
